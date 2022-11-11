@@ -8,9 +8,10 @@ public class PlayerController : MonoBehaviour
     public GameObject playerBullet;
     public GameObject explosion;
     public Image playerHealt;
+    public Image panel;
     float playerSpeed = 5;
     float bulletSpeed = 500f;
-    float healt = 10f;
+    float healt = 1f;
     void Start()
     {
 
@@ -19,10 +20,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        Move();
+        Fire();
+    }
+   void Move()
+    {
         float yatay = Input.GetAxis("Horizontal");
         transform.Translate(yatay * Time.deltaTime * playerSpeed, 0, 0);
-
-        Fire();
     }
     void Fire()
     {
@@ -37,13 +41,21 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag.Equals("Respawn"))
         {
-            healt -= 1;
+            Destroy(collision.gameObject);
+            healt -= 0.1f;
             if (healt <= 0)
             {
+                Destroy(gameObject);
                 GameObject newExplosion = Instantiate(explosion, transform.position, Quaternion.identity);
                 Destroy(newExplosion, 1.5f);
+                panel.gameObject.SetActive(true);
+                Invoke("StopGame", 1f);
             }
             playerHealt.fillAmount = healt;
         }
+    }
+    void StopGame()
+    {
+        Time.timeScale = 0;
     }
 }
