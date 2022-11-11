@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     float playerSpeed = 5;
     float bulletSpeed = 500f;
     float healt = 1f;
+    public AudioClip fireEffect;
+    public AudioClip explosionEffect;
     void Start()
     {
 
@@ -32,6 +34,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            AudioSource.PlayClipAtPoint(fireEffect, transform.position);
             GameObject newBullet = Instantiate(playerBullet, transform.position, Quaternion.identity);
             newBullet.GetComponent<Rigidbody2D>().AddForce(Vector2.up * bulletSpeed);
             Destroy(newBullet, 1.5f);
@@ -45,6 +48,7 @@ public class PlayerController : MonoBehaviour
             healt -= 0.1f;
             if (healt <= 0)
             {
+                AudioSource.PlayClipAtPoint(explosionEffect, transform.position);
                 Destroy(gameObject);
                 GameObject newExplosion = Instantiate(explosion, transform.position, Quaternion.identity);
                 Destroy(newExplosion, 1.5f);

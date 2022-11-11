@@ -14,11 +14,12 @@ public class EnemyController : MonoBehaviour
     float bulletSpeed = 500f;
     float healt = 1f;
     public Transform player;
+    public AudioClip explosionEffect;
 
     void Start()
     {
         
-            InvokeRepeating("EnemyFire", 0, 0.5f);
+            InvokeRepeating("EnemyFire", 0, 0.3f);
         
 
     }
@@ -47,6 +48,7 @@ public class EnemyController : MonoBehaviour
             healt -= 0.05f;
             if (healt <= 0)
             {
+                AudioSource.PlayClipAtPoint(explosionEffect, transform.position);
                 Destroy(gameObject);
                 GameObject newExplosion = Instantiate(explosion, transform.position, Quaternion.identity);
                 Destroy(newExplosion, 1.5f);
