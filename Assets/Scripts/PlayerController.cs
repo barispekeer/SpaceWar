@@ -48,18 +48,14 @@ public class PlayerController : MonoBehaviour
             healt -= 0.1f;
             if (healt <= 0)
             {
-                AudioSource.PlayClipAtPoint(explosionEffect, transform.position);
-                Destroy(gameObject);
+                GameController.instance.isFinished = true;
+                AudioSource.PlayClipAtPoint(explosionEffect, transform.position);             
                 GameObject newExplosion = Instantiate(explosion, transform.position, Quaternion.identity);
                 Destroy(newExplosion, 1.5f);
                 panel.gameObject.SetActive(true);
-                Invoke("StopGame", 1f);
+                gameObject.SetActive(false);
             }
             playerHealt.fillAmount = healt;
         }
-    }
-    void StopGame()
-    {
-        Time.timeScale = 0;
     }
 }

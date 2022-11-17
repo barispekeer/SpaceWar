@@ -18,15 +18,16 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
-        
-            InvokeRepeating("EnemyFire", 0, 0.3f);
-        
+
+        InvokeRepeating("EnemyFire", 0, 0.3f);
+
 
     }
 
 
     void Update()
     {
+
         if (player)
         {
             if (transform.position.x < player.position.x)
@@ -37,7 +38,7 @@ public class EnemyController : MonoBehaviour
             {
                 transform.Translate(-speed * Time.deltaTime, 0, 0);
             }
-            
+
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -49,23 +50,22 @@ public class EnemyController : MonoBehaviour
             if (healt <= 0)
             {
                 AudioSource.PlayClipAtPoint(explosionEffect, transform.position);
-                Destroy(gameObject);
                 GameObject newExplosion = Instantiate(explosion, transform.position, Quaternion.identity);
                 Destroy(newExplosion, 1.5f);
                 panel.gameObject.SetActive(true);
-                Invoke("StopGame", 1f);
+                gameObject.SetActive(false);
             }
             enemyHealt.fillAmount = healt;
         }
     }
     void EnemyFire()
     {
-        GameObject newBullet = Instantiate(bullet,transform.position,Quaternion.identity);
+        if (GameController.instance.isFinished)
+        {
+            CancelInvoke(nameof(EnemyFire));
+        }
+        GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
         newBullet.GetComponent<Rigidbody2D>().AddForce(Vector2.down * bulletSpeed);
         Destroy(newBullet, 1.5f);
-    }
-    void StopGame()
-    {
-        Time.timeScale = 0;
     }
 }
